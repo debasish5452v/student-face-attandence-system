@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Camera Configuration – FaceTrack</title>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------- 1. DESIGN-TOKEN CLONE (NO NIGHT MODE) ---------- */
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f0f9ff;
+            --bg-main: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --transition: all .3s ease;
+
+            /* danger palette */
+            --danger-bg: #fef2f2;
+            --danger-border: #fecaca;
+            --danger-text: #dc2626;
+        }
+
+        /* ---------- 2. GLOBAL ---------- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html,body{
+            min-height: 100%;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        /* ---------- 3. CARD ---------- */
+        .del-card{
+            width: 100%;
+            max-width: 500px;
+            background: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            transition: var(--transition);
+        }
+        .del-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+
+        /* icon */
+        .del-icon{
+            width: 80px; height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--danger-text);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* text */
+        .del-card h1{
+            font-size: 1.875rem;
+            font-weight: 800;
+            letter-spacing: -.5px;
+            margin-bottom: .5rem;
+            color: var(--danger-text);
+        }
+        .del-card p{
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* form actions */
+        .actions{
+            display: flex;
+            gap: .75rem;
+            justify-content: center;
+        }
+        .btn{
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .9rem 2rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-danger{
+            background: var(--danger-text);
+            color: white;
+        }
+        .btn-danger:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-outline{
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .btn-outline:hover { background: var(--primary); color: white; }
+
+        /* bigger / farther home button */
+        .fab-home{
+            position: fixed;
+            bottom: 3rem;
+            left: 3rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .fab-home:hover { transform: scale(1.1) rotate(10deg); box-shadow: var(--shadow-xl); }
+    </style>
+</head>
+<body>
+    <div class="del-card">
+        <!-- warning icon -->
+        <div class="del-icon">
+            <i data-lucide="alert-triangle" size="40"></i>
+        </div>
+
+        <!-- text -->
+        <h1>Delete Camera Configuration</h1>
+        <p>Are you sure you want to delete <strong>{{ config.name }}</strong>? This action cannot be undone.</p>
+
+        <!-- form -->
+        <form method="post" class="actions">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                <i data-lucide="trash-2" size="16"></i>Yes, Delete
+            </button>
+            <a href="{% url 'camera_config_list' %}" class="btn btn-outline">
+                <i data-lucide="x" size="16"></i>Cancel
+            </a>
+        </form>
+    </div>
+
+    <!-- bigger / farther home button -->
+    <div class="fab-home" onclick="location.href='{% url 'home' %}'" aria-label="Back to Home">
+        <i data-lucide="home" size="28"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        /* Lucide icons */
+        lucide.createIcons();
+    </script>
+</body>
+</html>

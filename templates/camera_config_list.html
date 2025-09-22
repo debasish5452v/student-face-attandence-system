@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Configurations – FaceTrack</title>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------- 1. DESIGN-TOKEN CLONE (NO NIGHT MODE) ---------- */
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f0f9ff;
+            --bg-main: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --transition: all .3s ease;
+        }
+
+        /* ---------- 2. GLOBAL ---------- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html,body{
+            min-height: 100%;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        /* ---------- 3. PAGE LAYOUT ---------- */
+        .cfg-wrapper{
+            max-width: 900px;
+            width: 100%;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+        .cfg-card{
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+        .cfg-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+
+        /* header */
+        .cfg-header{
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .cfg-header .logo-icon{
+            width: 56px; height: 56px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: white; box-shadow: var(--shadow-md);
+        }
+        .cfg-header h1{
+            font-size: 1.875rem;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        /* table */
+        .table-wrap{
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .9rem;
+        }
+        th,td{
+            padding: .75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th{
+            background: var(--bg-main);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            font-size: .75rem;
+        }
+        tr:last-child td{ border-bottom: none; }
+        tr:hover td{ background: rgba(99,102,241,.06); }
+        .action-links{
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+        .action-links a{
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: .35rem .65rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: .8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .action-links a:hover{
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* bottom buttons */
+        .btn-bar{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .btn{
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: .95rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-primary{
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-outline{
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .btn-outline:hover { background: var(--primary); color: white; }
+
+        /* bigger / farther home button */
+        .fab-home{
+            position: fixed;
+            bottom: 3rem;
+            left: 3rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .fab-home:hover { transform: scale(1.1) rotate(10deg); box-shadow: var(--shadow-xl); }
+    </style>
+</head>
+<body>
+    <div class="cfg-wrapper">
+        <div class="cfg-card">
+            <div class="cfg-header">
+                <div class="logo-icon">
+                    <i data-lucide="camera" size="28"></i>
+                </div>
+                <h1>Saved Camera Configurations</h1>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Camera Source</th>
+                            <th>Threshold</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for config in configs %}
+                        <tr>
+                            <td>{{ config.name }}</td>
+                            <td>{{ config.camera_source }}</td>
+                            <td>{{ config.threshold }}</td>
+                            <td>
+                                <div class="action-links">
+                                    <a href="{% url 'camera_config_update' config.id %}">
+                                        <i data-lucide="edit-2" size="14"></i>Edit
+                                    </a>
+                                    <a href="{% url 'camera_config_delete' config.id %}">
+                                        <i data-lucide="trash-2" size="14"></i>Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-bar">
+                <a href="{% url 'camera_config_create' %}" class="btn btn-primary">
+                    <i data-lucide="plus" size="16"></i>Create New Configuration
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline">
+                    <i data-lucide="home" size="16"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- bigger / farther home button -->
+    <div class="fab-home" onclick="location.href='{% url 'home' %}'" aria-label="Back to Home">
+        <i data-lucide="home" size="28"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        /* Lucide icons */
+        lucide.createIcons();
+    </script>
+</body>
+</html>

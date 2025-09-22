@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+
+    <!-- Lucide icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ----------  CSS VARIABLES (NO NIGHT MODE) ---------- */
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --bg-main: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, .08);
+        }
+
+        /* ----------  RESET  ---------- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ----------  SIDEBAR  ---------- */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .75rem;
+            position: fixed;
+            height: 100%;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: transform .3s;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius);
+            display: grid;
+            place-items: center;
+            color: #fff;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1rem;
+            border-radius: var(--radius);
+            font-size: .95rem;
+            transition: background .2s, color .2s, transform .2s;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-main);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+
+        /* ----------  MAIN CONTENT  ---------- */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        /* ----------  FORM CARD  ---------- */
+        .form-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            background: var(--primary);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview {
+            display: none;
+            margin-top: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            max-width: 100%;
+        }
+
+        /* ----------  COMPACT FORM FIELDS  ---------- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, .15);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .back-button {
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .back-button:hover {
+            color: var(--primary);
+        }
+
+        /* ----------  MOBILE  ---------- */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1100;
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius);
+            border: none;
+            background: var(--primary);
+            color: #fff;
+            place-items: center;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 3.5rem 1rem 2rem;
+            }
+
+            .menu-toggle {
+                display: grid;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- =====  MOBILE HAMBURGER  ===== -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+        <i data-lucide="menu" width="22" height="22"></i>
+    </button>
+
+    <!-- =====  SIDEBAR  ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i data-lucide="scan-face"></i></div>
+            <span>Face Attendance</span>
+        </div>
+
+        <nav>
+            <a href="{% url 'register_employee' %}" class="nav-item active">
+                <i data-lucide="user-plus"></i> Student Registration
+            </a>
+            <a href="{% url 'employee-list' %}" class="nav-item">
+                <i data-lucide="users"></i> View Students
+            </a>
+            <a href="{% url 'capture_and_recognize' %}" class="nav-item">
+                <i data-lucide="camera"></i> Mark Attendance
+            </a>
+            <a href="{% url 'emp_attendance_list' %}" class="nav-item">
+                <i data-lucide="list-checks"></i> Attendance Log
+            </a>
+            <a href="{% url 'camera_config_list' %}" class="nav-item">
+                <i data-lucide="settings"></i> Camera Config
+            </a>
+        </nav>
+    </aside>
+
+    <!-- =====  MAIN CONTENT  ===== -->
+    <main class="main-content">
+        <header class="header">
+            <div>
+                <h1>Student Registration</h1>
+                <p style="color:var(--text-secondary)">Capture face and fill details</p>
+            </div>
+        </header>
+
+        <section>
+            <div class="form-card">
+                {% if messages %}
+                <div class="alert alert-info">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="video-wrapper">
+                    <video id="video" autoplay></video>
+                </div>
+                <img id="imagePreview" class="image-preview" src="" alt="Captured Image Preview" />
+
+                <form id="registrationForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Employee ID</label>
+                            <input type="text" class="form-control" name="employee_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" name="phone_number" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Designation</label>
+                            <input type="text" class="form-control" name="designation" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <input type="text" class="form-control" name="department" required>
+                        </div>
+                    </div>
+
+                    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+                    <input type="hidden" id="image_data" name="image_data">
+
+                    <button type="submit" class="btn-submit">Submit Registration</button>
+
+                    <div class="back-button" onclick="location.href='{% url 'home' %}'">
+                        <i data-lucide="home" width="16"></i> Back to Home
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- =====  JS  ===== -->
+    <script>
+        /* lucide icons */
+        lucide.createIcons();
+
+        /* ------ mobile menu ------ */
+        const menuBtn = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) sidebar.classList.remove('open');
+            });
+        });
+
+        /* ------ camera capture ------ */
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const imageDataInput = document.getElementById('image_data');
+        const imagePreview = document.getElementById('imagePreview');
+        const registrationForm = document.getElementById('registrationForm');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(err => {
+                console.error("Error accessing the camera: ", err);
+            });
+
+        registrationForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataURL = canvas.toDataURL('image/jpeg');
+            imageDataInput.value = dataURL;
+            imagePreview.src = dataURL;
+            imagePreview.style.display = 'block';
+            registrationForm.submit();
+        });
+    </script>
+</body>
+
+</html>

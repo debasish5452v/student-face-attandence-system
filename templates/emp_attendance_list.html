@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Employee Attendance List – FaceTrack</title>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------- 1. DESIGN-TOKEN CLONE (NO NIGHT MODE) ---------- */
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f0f9ff;
+            --bg-main: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --transition: all .3s ease;
+        }
+
+        /* ---------- 2. GLOBAL ---------- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html,body{
+            min-height: 100%;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        /* ---------- 3. PAGE LAYOUT ---------- */
+        .att-wrapper{
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .att-card{
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+        .att-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+
+        /* header */
+        .att-header{
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .att-header .logo-icon{
+            width: 56px; height: 56px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: white; box-shadow: var(--shadow-md);
+        }
+        .att-header h1{
+            font-size: 1.875rem;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        /* filters */
+        .filter-bar{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .filter-group{
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            flex: 1 1 250px;
+        }
+        .filter-input{
+            width: 100%;
+            padding: .75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: .95rem;
+            transition: var(--transition);
+        }
+        .filter-input:focus{
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(99,102,241,.2);
+        }
+        .btn-filter{
+            padding: .75rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            font-weight: 600;
+            font-size: .95rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-filter:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-download{
+            padding: .75rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            font-weight: 600;
+            font-size: .95rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-download:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+        /* table */
+        .table-wrap{
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .9rem;
+        }
+        th,td{
+            padding: .75rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        th{
+            background: var(--bg-main);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            font-size: .75rem;
+        }
+        tr:last-child td{ border-bottom: none; }
+        tr:hover td{ background: rgba(99,102,241,.06); }
+        .emp-img{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border);
+        }
+        .no-img{
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--text-light);
+            font-size: .75rem;
+        }
+
+        /* back home – bigger & farther */
+        .back-home{
+            position: fixed;
+            bottom: 3rem;
+            left: 3rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .back-home:hover { transform: scale(1.1) rotate(10deg); box-shadow: var(--shadow-xl); }
+    </style>
+</head>
+<body>
+    <div class="att-wrapper">
+        <div class="att-card">
+            <div class="att-header">
+                <div class="logo-icon">
+                    <i data-lucide="clipboard-list" size="28"></i>
+                </div>
+                <h1>Employee Attendance Records</h1>
+            </div>
+
+            <!-- filters -->
+            <form method="get" class="filter-bar">
+                <div class="filter-group">
+                    <input type="text" name="search" class="filter-input" placeholder="Search employees…" value="{{ search_query }}">
+                    <button class="btn-filter" type="submit"><i data-lucide="search" size="16"></i></button>
+                </div>
+                <div class="filter-group">
+                    <input type="date" name="attendance_date" class="filter-input" value="{{ date_filter }}">
+                    <button class="btn-filter" type="submit"><i data-lucide="calendar" size="16"></i></button>
+                </div>
+                <a href="?download_report=true&search={{ search_query }}&attendance_date={{ date_filter }}" class="btn-download">
+                    <i data-lucide="download" size="16"></i> Download Report
+                </a>
+            </form>
+
+            <!-- table -->
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Date</th>
+                            <th>Check-In</th>
+                            <th>Check-Out</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in employee_attendance_data %}
+                            {% for attendance in data.attendance_records %}
+                            <tr>
+                                <td>
+                                    {% if data.employee.profile_picture %}
+                                        <img src="{{ data.employee.profile_picture.url }}" alt="{{ data.employee.name }}" class="emp-img">
+                                    {% else %}
+                                        <span class="no-img">No Image</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ data.employee.name }}</td>
+                                <td>{{ data.employee.employee_id }}</td>
+                                <td>{{ attendance.date }}</td>
+                                <td>
+                                    {% if attendance.check_in_time %}
+                                        {{ attendance.check_in_time|date:"h:i:s A" }}
+                                    {% else %}
+                                        <span style="color:var(--text-light)">—</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if attendance.check_out_time %}
+                                        {{ attendance.check_out_time|date:"h:i:s A" }}
+                                    {% else %}
+                                        <span style="color:var(--text-light)">—</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if attendance.check_in_time and attendance.check_out_time %}
+                                        {{ attendance.calculate_duration }}
+                                    {% else %}
+                                        <span style="color:var(--text-light)">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- bigger / farther home button -->
+    <div class="back-home" onclick="location.href='{% url 'home' %}'" aria-label="Back to Home">
+        <i data-lucide="home" size="28"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        /* Lucide icons */
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.name|default:"Create Camera Configuration" }} – FaceTrack</title>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------- 1. DESIGN-TOKEN CLONE (NO NIGHT MODE) ---------- */
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f0f9ff;
+            --bg-main: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --transition: all .3s ease;
+        }
+
+        /* ---------- 2. GLOBAL ---------- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html,body{
+            min-height: 100%;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        /* ---------- 3. CARD ---------- */
+        .form-card{
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            transition: var(--transition);
+        }
+        .form-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+
+        /* header */
+        .form-header{
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-header .logo-icon{
+            width: 56px; height: 56px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: white; box-shadow: var(--shadow-md);
+        }
+        .form-header h1{
+            font-size: 1.875rem;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        /* messages */
+        .alert{
+            padding: .75rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: .875rem;
+            margin-bottom: 1rem;
+        }
+        .alert-success{
+            background: rgba(34,197,94,.15);
+            color: #22c55e;
+            border: 1px solid rgba(34,197,94,.25);
+        }
+        .alert-error{
+            background: rgba(239,68,68,.15);
+            color: #ef4444;
+            border: 1px solid rgba(239,68,68,.25);
+        }
+
+        /* form */
+        .form-group{
+            margin-bottom: 1.25rem;
+        }
+        label{
+            display: block;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: .35rem;
+            font-size: .875rem;
+        }
+        input[type="text"],
+        input[type="number"]{
+            width: 100%;
+            padding: .75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: .95rem;
+            transition: var(--transition);
+        }
+        input:focus{
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(99,102,241,.2);
+        }
+        .btn-submit{
+            width: 100%;
+            padding: .9rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+        /* bottom links */
+        .form-links{
+            display: flex;
+            gap: .75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        .btn-link{
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .5rem 1rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: .875rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .btn-link:hover{
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* bigger / farther home button */
+        .fab-home{
+            position: fixed;
+            bottom: 3rem;
+            left: 3rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .fab-home:hover { transform: scale(1.1) rotate(10deg); box-shadow: var(--shadow-xl); }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <div class="form-header">
+            <div class="logo-icon">
+                <i data-lucide="camera" size="28"></i>
+            </div>
+            <h1>{{ config.name|default:"Create Camera Configuration" }}</h1>
+        </div>
+
+        <!-- messages -->
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <!-- form -->
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Camera Name</label>
+                <input type="text" id="name" name="name" value="{{ config.name|default:'' }}" placeholder="e.g. Main Gate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="camera_source">Camera Source</label>
+                <input type="text" id="camera_source" name="camera_source" value="{{ config.camera_source|default:'' }}" placeholder="0  or  http://ip:port/video" required>
+            </div>
+
+            <div class="form-group">
+                <label for="threshold">Recognition Threshold</label>
+                <input type="number" step="0.01" min="0" max="1" id="threshold" name="threshold" value="{{ config.threshold|default:0.6 }}" placeholder="0.0 – 1.0" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Save Configuration</button>
+        </form>
+
+        <div class="form-links">
+            <a href="{% url 'camera_config_list' %}" class="btn-link">
+                <i data-lucide="list" size="14"></i>Back to List
+            </a>
+            <a href="{% url 'home' %}" class="btn-link">
+                <i data-lucide="home" size="14"></i>Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- bigger / farther home button -->
+    <div class="fab-home" onclick="location.href='{% url 'home' %}'" aria-label="Back to Home">
+        <i data-lucide="home" size="28"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        /* Lucide icons */
+        lucide.createIcons();
+    </script>
+</body>
+</html>
