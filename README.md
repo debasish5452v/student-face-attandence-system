@@ -1,4 +1,4 @@
-# Face-Based Employee Attendance System
+# Face-Based Student Attendance System
 
 A Django web application for automated employee/student attendance using face recognition. Supports webcam and IP camera sources, live recognition, attendance logging, and admin management.
 
